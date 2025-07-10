@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: konfi-back
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: konfi-back
+  template:
+    metadata:
+      labels:
+        app: konfi-back
+    spec:
+      containers:
+        - name: konfi-back
+          image: registry.digitalocean.com/denic0la-ocean/konfi-back:1.0.0
+          ports:
+            - containerPort: 8080
+              hostPort: 8080
+              name: http
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 800m
+              memory: 2000Mi

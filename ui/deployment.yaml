@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: konfi-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: konfi-ui
+  template:
+    metadata:
+      labels:
+        app: konfi-ui
+    spec:
+      containers:
+        - name: konfi-ui
+          image: registry.digitalocean.com/denic0la-ocean/konfi-ui:1.0.1
+          ports:
+            - containerPort: 4000
+              hostPort: 4000
+              name: http
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 400m
+              memory: 500Mi

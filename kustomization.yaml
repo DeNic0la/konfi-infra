@@ -1,0 +1,10 @@
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+labels:
+  - pairs:
+    - key: app.kubernetes.io/part-of
+      value: konfi-app
+resources:
+  - ingress.yaml
+  - ui
+  - back

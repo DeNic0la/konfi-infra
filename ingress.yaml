@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-konfi
+  namespace: konfi
+  annotations:
+    cert-manager.io/issuer: letsencrypt-nginx
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - konfi.denic0la.ch
+      secretName: letsencrypt-nginx
+  rules:
+    - host: konfi.denic0la.ch
+      http:
+        paths:
+          - path: "/native"
+            pathType: Prefix
+            backend:
+              service:
+                name: konfi-back
+                port:
+                  number: 80
+          - path: "/sockJs"
+            pathType: Prefix
+            backend:
+              service:
+                name: konfi-back
+                port:
+                  number: 80
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: konfi-ui
+                port:
+                  number: 80
+
