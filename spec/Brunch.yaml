@@ -1,0 +1,487 @@
+openapi: 3.1.0
+info:
+  title: Brunch Voting API
+  version: 1.0.0
+  description: API for managing Brunch voting
+
+paths:
+  /brunches:
+    post:
+      summary: Create a new brunch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrunchCreate'
+      responses:
+        '201':
+          description: Brunch created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrunchInfo'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+    get:
+      summary: Get all brunches (id only)
+      responses:
+        '200':
+          description: List of all brunch IDs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BrunchId'
+              examples:
+                default:
+                  summary: Sample brunch IDs
+                  value: [ "PI-25-3-Rudolf", "2025-Q1-Confidence" ]
+
+  /brunches/{brunchId}:
+    parameters:
+      - $ref: '#/components/parameters/BrunchIdParam'
+
+    get:
+      security:
+        - VotingPassword: [ ]
+        - AdminPassword: [ ]
+        - { }
+      summary: Get a specific brunch (without answers)
+      responses:
+        '200':
+          description: Brunch details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrunchInfo'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    put:
+      security:
+        - AdminPassword: [ ]
+        - { }
+      summary: Edit a brunch (admin password required)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrunchUpdate'
+      responses:
+        '200':
+          description: Brunch updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrunchInfo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      summary: Delete a brunch (admin password required)
+      security:
+        - AdminPassword: [ ]
+        - { }
+      responses:
+        '204':
+          description: Brunch deleted successfully
+          content: { }
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /brunches/{brunchId}/vote:
+    post:
+      security:
+        - VotingPassword: [ ]
+        - { }
+      summary: Answer a brunch (vote)
+      parameters:
+        - $ref: '#/components/parameters/BrunchIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrunchVote'
+      responses:
+        '200':
+          description: Vote submitted successfully
+          content: { }
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /brunches/{brunchId}/results:
+    get:
+      security:
+        - AdminPassword: [ ]
+        - { }
+      summary: Get results for a brunch (admin password required)
+      parameters:
+        - $ref: '#/components/parameters/BrunchIdParam'
+      responses:
+        '200':
+          description: Brunch results retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BrunchVote'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+components:
+  parameters:
+    BrunchIdParam:
+      name: brunchId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/BrunchId'
+
+  schemas:
+    BrunchId:
+      type: string
+      minLength: 3
+      maxLength: 50
+      example: "PI-25-3-Rudolf"
+      pattern: "^[a-zA-Z0-9-]+$"
+
+    BrunchBase:
+      type: object
+      required: [ title ]
+      properties:
+        title:
+          type: string
+          description: Title of the brunch
+          example: "Planning 25-3 Team Rudolf Confidence Voting"
+        requireEmail:
+          type: boolean
+          default: false
+        emailRegexp:
+          type: string
+          nullable: true
+          default: null
+          example: "^[a-zA-Z0-9._%+-]+@company\\.ch$"
+          pattern: ^\/.*\/[gimsuy]*$
+          description: Optional regex to validate email
+        adminPassword:
+          type: string
+          nullable: true
+          description: Admin password required for editing and viewing results
+          writeOnly: true
+          default: null
+          examples: [ "admin123","supersecret",null ]
+        votingPassword:
+          type: string
+          nullable: true
+          description: Password required for voting
+          writeOnly: true
+          default: null
+          examples: [ "teamvote123","supersecret",null ]
+
+
+    BrunchCreate:
+      allOf:
+        - $ref: '#/components/schemas/BrunchBase'
+        - type: object
+          required: [ id, questions ]
+          properties:
+            id:
+              $ref: '#/components/schemas/BrunchId'
+            questions:
+              type: array
+              minItems: 1
+              uniqueItems: true
+              items:
+                $ref: '#/components/schemas/BrunchQuestion'
+
+    BrunchUpdate:
+      allOf:
+        - $ref: '#/components/schemas/BrunchBase'
+        - type: object
+          required: [ questions ]
+          properties:
+            questions:
+              type: array
+              minItems: 1
+              uniqueItems: true
+              items:
+                $ref: '#/components/schemas/BrunchQuestion'
+
+    BrunchInfo:
+      allOf:
+        - $ref: '#/components/schemas/BrunchBase'
+        - type: object
+          required: [ questions ]
+          properties:
+            id:
+              $ref: '#/components/schemas/BrunchId'
+              readOnly: true
+            questions:
+              type: array
+              minItems: 1
+              uniqueItems: true
+              items:
+                $ref: '#/components/schemas/BrunchQuestionInfo'
+
+    BrunchQuestionBase:
+      type: object
+      required: [ id, min, max ]
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          nullable: true
+          examples: [ "How confident are you in the project?","Rate your confidence level", "objective 3",null ]
+        link:
+          type: string
+          format: uri
+          nullable: true
+          examples: [ "https://example.com/question-details","https://github.com/DeNic0la", "https://internal.secret.company.url.com/wiki/teamspace/data",null ]
+        min:
+          type: integer
+          default: 1
+          minimum: 0
+        max:
+          type: integer
+          default: 5
+          maximum: 13
+        optional:
+          type: boolean
+          default: false
+
+    BrunchQuestionInfo:
+      allOf:
+        - $ref: '#/components/schemas/BrunchQuestionBase'
+        - type: object
+          properties:
+            order:
+              type: integer
+              nullable: false
+              examples: [ 1,3,5 ]
+            recommended:
+              type: integer
+              examples: [ 1,5 ]
+              description: Recommended value (must be between min and max)
+
+    BrunchQuestion:
+      allOf:
+        - $ref: '#/components/schemas/BrunchQuestionBase'
+        - type: object
+          properties:
+            order:
+              type: integer
+              nullable: true
+              examples: [ 1,3,5,null ]
+            recommended:
+              type: integer
+              nullable: true
+              examples: [ 1,3,5,null ]
+              description: Recommended value (must be between min and max)
+
+    BrunchVote:
+      type: object
+      required: [ name, answers ]
+      examples:
+        JaneSmithVote:
+          summary: Example vote submission
+          value:
+            name: "Jane Smith"
+            email: "jane.smith@company.ch"
+            answers:
+              - questionId: 1
+                value: 5
+              - questionId: 2
+                value: 4
+        AliceVote:
+          summary: Example vote Jane
+          value:
+            name: "Alice"
+            email: "alice@company.ch"
+            answers:
+              - questionId: 1
+                value: 4
+              - questionId: 2
+                value: 5
+        BobVote:
+          summary: Example vote Bob
+          value:
+            name: "Bob"
+            email: null
+            answers:
+              - questionId: 1
+                value: 3
+              - questionId: 2
+                value: 2
+      properties:
+        name:
+          type: string
+          examples: [ "John Doe", "Jane Smith", "Team Rudolf", "Anonymous" ]
+          description: Name of the voter
+        email:
+          type: string
+          nullable: true
+          format: email
+          examples: [ "user@company.ch","user@private.mail",null ]
+        answers:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/BrunchAnswer'
+
+    BrunchAnswer:
+      type: object
+      required: [ questionId, value ]
+      properties:
+        questionId:
+          type: integer
+        value:
+          type: integer
+          examples: [ 1,3,5 ]
+          description: Must be between min and max as defined in the question
+    ErrorResponse:
+      type: object
+      required: [ code, message ]
+      properties:
+        code:
+          type: integer
+          description: Error code
+          example: 400
+        message:
+          type: string
+          description: Error message
+          example: "Invalid input data"
+        details:
+          type: string
+          nullable: true
+          description: Additional error details not meant for end users
+          example: "The email format is invalid"
+
+  securitySchemes:
+    AdminPassword:
+      type: apiKey
+      in: header
+      name: X-ADMIN-PASSWORD
+    VotingPassword:
+      type: apiKey
+      in: header
+      name: X-VOTING-PASSWORD
+
+
+  responses:
+    BadRequest:
+      description: Invalid input
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            InvalidInput:
+              $ref: '#/components/examples/BadRequest'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            Unauthorized:
+              $ref: '#/components/examples/Unauthorized'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            Forbidden:
+              $ref: '#/components/examples/Forbidden'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            NotFound:
+              $ref: '#/components/examples/NotFound'
+    Conflict:
+      description: Resource conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            Conflict:
+              $ref: '#/components/examples/ResourceConflict'
+
+
+
+  examples:
+    ResourceConflict:
+      summary: Example conflict response
+      value:
+        code: 409
+        message: "Brunch ID already exists"
+        details: "The provided brunch ID is already in use. Please choose a different ID."
+    ResourceNotFound:
+      summary: Example not found response
+      value:
+        code: 404
+        message: "Brunch not found"
+        details: "The requested brunch ID does not exist in the system."
+    Unauthorized:
+      summary: Example unauthorized response
+      value:
+        code: 401
+        message: "Unauthorized access"
+        details: "You must provide a valid admin password to access this resource."
+    BadRequest:
+      summary: Example bad request response
+      value:
+        code: 400
+        message: "Invalid input data"
+        details: "The provided data does not meet the required format or constraints."
+    Forbidden:
+      summary: Example forbidden response
+      value:
+        code: 403
+        message: "Access forbidden"
+        details: "You do not have permission to perform this action."
+    NotFound:
+      summary: Example not found response
+      value:
+        code: 404
+        message: "Resource not found"
+        details: "The requested resource could not be found in the system."
