@@ -1,13 +1,16 @@
 openapi: 3.0.0
 info:
   title: Brunch Voting API
-  version: 1.1.1
+  version: 1.1.2
   description: API for managing Brunch voting
 servers:
-  - url: http:localhost:8080/api
-    description: Local development server
-  - url: https://denic0la.ch/api
-    description: Production server
+  - url: "{server}/api"
+    variables:
+      server:
+        default: "https://denic0la.ch"
+        enum:
+          - "https://denic0la.ch"
+          - "http://localhost:8080"
 
 tags:
   - name: Admin
