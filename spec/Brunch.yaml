@@ -1,13 +1,29 @@
-openapi: 3.1.0
+openapi: 3.0.0
 info:
   title: Brunch Voting API
-  version: 1.0.0
+  version: 1.1.0
   description: API for managing Brunch voting
+servers:
+  - url: http:localhost:8080/api
+    description: Local development server
+  - url: https://denic0la.ch/api
+    description: Production server
+
+tags:
+  - name: Admin
+    description: Operations for administrating Brunches
+  - name: Voting
+    description: Operations for voting on Brunches
+
 
 paths:
   /brunches:
     post:
-      summary: Create a new brunch
+      summary: Create new Brunch
+      description: Save a new brunch with questions and voting options
+      operationId: createBrunch
+      tags:
+        - Admin
       requestBody:
         required: true
         content:
@@ -27,7 +43,11 @@ paths:
           $ref: '#/components/responses/Conflict'
 
     get:
-      summary: Get all brunches (id only)
+      summary: Get Brunches
+      description: Retrieve a list of all brunch IDs
+      operationId: getAllBrunches
+      tags:
+        - Admin
       responses:
         '200':
           description: List of all brunch IDs
@@ -43,15 +63,18 @@ paths:
                   value: [ "PI-25-3-Rudolf", "2025-Q1-Confidence" ]
 
   /brunches/{brunchId}:
-    parameters:
-      - $ref: '#/components/parameters/BrunchIdParam'
-
     get:
       security:
         - VotingPassword: [ ]
         - AdminPassword: [ ]
         - { }
-      summary: Get a specific brunch (without answers)
+      summary: Get Brunch
+      description: Retrieve details of a specific brunch by ID
+      operationId: getBrunchById
+      parameters:
+        - $ref: '#/components/parameters/BrunchIdParam'
+      tags:
+        - Voting
       responses:
         '200':
           description: Brunch details
@@ -70,7 +93,13 @@ paths:
       security:
         - AdminPassword: [ ]
         - { }
-      summary: Edit a brunch (admin password required)
+      summary: Edit Brunch
+      description: Edit an existing brunch by ID (admin password required)
+      operationId: updateBrunchById
+      tags:
+        - Admin
+      parameters:
+        - $ref: '#/components/parameters/BrunchIdParam'
       requestBody:
         required: true
         content:
@@ -92,7 +121,13 @@ paths:
           $ref: '#/components/responses/NotFound'
 
     delete:
-      summary: Delete a brunch (admin password required)
+      summary: Delete Brunch
+      description: Delete a specific brunch by ID (admin password required)
+      operationId: deleteBrunchById
+      tags:
+        - Admin
+      parameters:
+        - $ref: '#/components/parameters/BrunchIdParam'
       security:
         - AdminPassword: [ ]
         - { }
@@ -112,7 +147,11 @@ paths:
       security:
         - VotingPassword: [ ]
         - { }
-      summary: Answer a brunch (vote)
+      summary: Vote on Brunch
+      description: Submit a vote for a specific brunch
+      operationId: createVoteOnBrunchById
+      tags:
+        - Voting
       parameters:
         - $ref: '#/components/parameters/BrunchIdParam'
       requestBody:
@@ -139,7 +178,11 @@ paths:
       security:
         - AdminPassword: [ ]
         - { }
-      summary: Get results for a brunch (admin password required)
+      summary: Get Voting Results for Brunch
+      tags:
+        - Admin
+      operationId: getResultsForBrunchById
+      description: Retrieve voting results for a specific brunch by ID
       parameters:
         - $ref: '#/components/parameters/BrunchIdParam'
       responses:
@@ -314,36 +357,36 @@ components:
       type: object
       required: [ name, answers ]
       examples:
-        JaneSmithVote:
-          summary: Example vote submission
-          value:
-            name: "Jane Smith"
-            email: "jane.smith@company.ch"
-            answers:
-              - questionId: 1
-                value: 5
-              - questionId: 2
-                value: 4
-        AliceVote:
-          summary: Example vote Jane
-          value:
-            name: "Alice"
-            email: "alice@company.ch"
-            answers:
-              - questionId: 1
-                value: 4
-              - questionId: 2
-                value: 5
-        BobVote:
-          summary: Example vote Bob
-          value:
-            name: "Bob"
-            email: null
-            answers:
-              - questionId: 1
-                value: 3
-              - questionId: 2
-                value: 2
+        - JaneSmithVote:
+            summary: Example vote submission
+            value:
+              name: "Jane Smith"
+              email: "jane.smith@company.ch"
+              answers:
+                - questionId: 1
+                  value: 5
+                - questionId: 2
+                  value: 4
+        - AliceVote:
+            summary: Example vote Jane
+            value:
+              name: "Alice"
+              email: "alice@company.ch"
+              answers:
+                - questionId: 1
+                  value: 4
+                - questionId: 2
+                  value: 5
+        - BobVote:
+            summary: Example vote Bob
+            value:
+              name: "Bob"
+              email: null
+              answers:
+                - questionId: 1
+                  value: 3
+                - questionId: 2
+                  value: 2
       properties:
         name:
           type: string
@@ -401,87 +444,55 @@ components:
 
   responses:
     BadRequest:
-      description: Invalid input
+      description: Bad Request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            InvalidInput:
-              $ref: '#/components/examples/BadRequest'
+          example:
+            code: 400
+            message: "Bad Request"
+            details: "The provided data does not meet the required format or constraints."
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            Unauthorized:
-              $ref: '#/components/examples/Unauthorized'
+          example:
+            code: 401
+            message: "Unauthorized access"
+            details: "You must provide a valid admin password to access this resource."
     Forbidden:
       description: Forbidden
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            Forbidden:
-              $ref: '#/components/examples/Forbidden'
+          example:
+            code: 403
+            message: "Access forbidden"
+            details: "You do not have permission to perform this action."
     NotFound:
       description: Resource not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            NotFound:
-              $ref: '#/components/examples/NotFound'
+          example:
+            code: 404
+            message: "Brunch not found"
+            details: "The requested brunch ID does not exist in the system."
     Conflict:
       description: Resource conflict
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            Conflict:
-              $ref: '#/components/examples/ResourceConflict'
+          example:
+            code: 409
+            message: "Brunch ID already exists"
+            details: "The provided brunch ID is already in use. Please choose a different ID."
 
 
 
-  examples:
-    ResourceConflict:
-      summary: Example conflict response
-      value:
-        code: 409
-        message: "Brunch ID already exists"
-        details: "The provided brunch ID is already in use. Please choose a different ID."
-    ResourceNotFound:
-      summary: Example not found response
-      value:
-        code: 404
-        message: "Brunch not found"
-        details: "The requested brunch ID does not exist in the system."
-    Unauthorized:
-      summary: Example unauthorized response
-      value:
-        code: 401
-        message: "Unauthorized access"
-        details: "You must provide a valid admin password to access this resource."
-    BadRequest:
-      summary: Example bad request response
-      value:
-        code: 400
-        message: "Invalid input data"
-        details: "The provided data does not meet the required format or constraints."
-    Forbidden:
-      summary: Example forbidden response
-      value:
-        code: 403
-        message: "Access forbidden"
-        details: "You do not have permission to perform this action."
-    NotFound:
-      summary: Example not found response
-      value:
-        code: 404
-        message: "Resource not found"
-        details: "The requested resource could not be found in the system."
