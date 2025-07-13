@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Brunch Voting API
-  version: 1.1.2
+  version: 1.2.0
   description: API for managing Brunch voting
 servers:
   - url: "{server}/api"
@@ -13,10 +13,10 @@ servers:
           - "http://localhost:8080"
 
 tags:
-  - name: Admin
-    description: Operations for administrating Brunches
+  - name: Brunch
+    description: Brunch operations
   - name: Voting
-    description: Operations for voting on Brunches
+    description: Voting operations
 
 
 paths:
@@ -26,7 +26,7 @@ paths:
       description: Save a new brunch with questions and voting options
       operationId: createBrunch
       tags:
-        - Admin
+        - Brunch
       requestBody:
         required: true
         content:
@@ -50,7 +50,7 @@ paths:
       description: Retrieve a list of all brunch IDs
       operationId: getAllBrunches
       tags:
-        - Admin
+        - Brunch
       responses:
         '200':
           description: List of all brunch IDs
@@ -77,7 +77,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/BrunchIdParam'
       tags:
-        - Voting
+        - Brunch
       responses:
         '200':
           description: Brunch details
@@ -100,7 +100,7 @@ paths:
       description: Edit an existing brunch by ID (admin password required)
       operationId: updateBrunchById
       tags:
-        - Admin
+        - Brunch
       parameters:
         - $ref: '#/components/parameters/BrunchIdParam'
       requestBody:
@@ -128,7 +128,7 @@ paths:
       description: Delete a specific brunch by ID (admin password required)
       operationId: deleteBrunchById
       tags:
-        - Admin
+        - Brunch
       parameters:
         - $ref: '#/components/parameters/BrunchIdParam'
       security:
@@ -183,7 +183,7 @@ paths:
         - { }
       summary: Get Voting Results for Brunch
       tags:
-        - Admin
+        - Voting
       operationId: getResultsForBrunchById
       description: Retrieve voting results for a specific brunch by ID
       parameters:
