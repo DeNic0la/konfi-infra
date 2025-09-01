@@ -1,0 +1,10 @@
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+nameSuffix: -db
+labels:
+  - pairs:
+      part: database
+resources:
+  - deployment.yaml
+  - service.yaml
+  - pvc.yaml

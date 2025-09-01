@@ -4,3 +4,4 @@ resources:
   - ingress.yaml
   - back
   - ui
+  - database
