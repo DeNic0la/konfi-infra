@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: konfi-ui
+  name: konfi
 spec:
   replicas: 1
   selector:
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: konfi-ui
-          image: registry.digitalocean.com/denic0la-ocean/konfi-ui:1.0.1
+          image: konfi-ui:latest
           ports:
             - containerPort: 4000
               hostPort: 4000

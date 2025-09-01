@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: konfi-ui
+  name: konfi
 spec:
   selector:
-    app: konfi-ui
+    app: konfi
   ports:
     - protocol: TCP
       port: 80
