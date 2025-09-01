@@ -11,6 +11,7 @@ images:
 
 namePrefix: dev-
 resources:
+  - issuer.cert-manager.yaml
   - ../../base
 patches:
   - patch: |-
