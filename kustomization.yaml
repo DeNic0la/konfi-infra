@@ -2,8 +2,11 @@ kind: Kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 labels:
   - pairs:
-    - key: app.kubernetes.io/part-of
-      value: konfi-app
+      app.kubernetes.io/part-of: konfi-app
+      app: konfi-app
+    includeSelectors: true
+    includeTemplates: true
+buildMetadata: [managedByLabel, originAnnotations, transformerAnnotations]
 resources:
   - ingress.yaml
   - ui
