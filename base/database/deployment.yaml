@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: konfi
+  name: konfi-mysql
 spec:
   selector:
     matchLabels:
-      app: konfi
+      app: konfi-mysql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: konfi
+        app: konfi-mysql
     spec:
       containers:
         - image: mysql:9
