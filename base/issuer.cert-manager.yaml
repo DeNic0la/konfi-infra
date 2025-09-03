@@ -7,7 +7,7 @@ spec:
     email: nicola@fioretti.info
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: letsencrypt-nginx-private-key-dev
+      name: letsencrypt-nginx-private-key
     solvers:
       # Use the HTTP-01 challenge provider
       - http01:
