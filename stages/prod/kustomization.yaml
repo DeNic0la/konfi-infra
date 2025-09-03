@@ -1,6 +1,6 @@
 kind: Kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
-namespace: konfi-dev
+namespace: konfi
 images:
   - name: konfi-back
     newName: registry.digitalocean.com/denic0la-ocean/konfi-back
@@ -9,17 +9,17 @@ images:
     newName: registry.digitalocean.com/denic0la-ocean/konfi-ui
     newTag: 1.0.1
 
-namePrefix: dev-
+namePrefix: prod-
 resources:
   - ../../base
 patches:
   - patch: |-
       - op: replace
         path: /spec/rules/0/host
-        value: konfi-dev.denic0la.ch
+        value: konfi.denic0la.ch
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: konfi-dev.denic0la.ch
+        value: konfi.denic0la.ch
     target:
       kind: Ingress
       name: router

@@ -11,7 +11,7 @@ spec:
   tls:
     - hosts:
         - stage.host
-      secretName: letsencrypt-nginx-private-key-dev
+      secretName: letsencrypt-nginx-private-key
   rules:
     - host: stage.host
       http:
