@@ -20,7 +20,7 @@ spec:
       http:
         paths:
           - path: "/native"
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: konfi-nginx
