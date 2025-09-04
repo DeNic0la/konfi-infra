@@ -40,10 +40,6 @@ spec:
               subPath: nginx.conf
             - mountPath: /etc/nginx/certs
               name: tls
-              subPath: tls.crt
-            - mountPath: /etc/nginx/certs
-              name: tls
-              subPath: tls.key
           ports:
             - containerPort: 443
               protocol: TCP
