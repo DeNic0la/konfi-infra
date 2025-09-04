@@ -19,6 +19,9 @@ spec:
             - containerPort: 8080
               hostPort: 8080
               name: http
+            - containerPort: 8080
+              hostPort: 8000
+              name: ws
           resources:
             requests:
               cpu: 100m

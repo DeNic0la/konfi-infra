@@ -8,10 +8,19 @@ metadata:
     cert-manager.io/issuer: dev-letsencrypt-nginx
     cert-manager.io/certificate-name: dev-letsencrypt-nginx
     cert-manager.io/common-name: konfi-dev.denic0la.ch
-    nginx.org/websocket-services: "konfi-back"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-    nginx.ingress.kubernetes.io/enable-websocket: "true"
+    nginx.ingress.kubernetes.io/server-snippets: |
+      location /native {
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_http_version 1.1;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header Connection "upgrade";
+        proxy_cache_bypass $http_upgrade;
+      }
 spec:
   ingressClassName: nginx
   tls:
@@ -28,7 +37,7 @@ spec:
               service:
                 name: konfi-back
                 port:
-                  number: 80
+                  number: 8000
           - path: "/sockJs"
             pathType: Prefix
             backend:

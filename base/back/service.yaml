@@ -10,5 +10,9 @@ spec:
       port: 80
       targetPort: 8080
       name: tcp-8080
+    - targetPort: 8000
+      port: 8000
+      appProtocol: kubernetes.io/ws
+      name: tcp-8000
 
 
