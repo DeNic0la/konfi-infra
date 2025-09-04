@@ -40,13 +40,13 @@ spec:
           image: nginxinc/nginx-unprivileged:alpine3.22-perl
           imagePullPolicy: IfNotPresent
           volumeMounts:
-            - mountPath: /etc/nginx
+            - mountPath: /etc/nginx/nginx.conf
               name: conf
               subPath: nginx.conf
-            - mountPath: /etc/nginx/certs
+            - mountPath: /etc/nginx/certs/tls.key
               name: key
               subPath: tls.key
-            - mountPath: /etc/nginx/certs
+            - mountPath: /etc/nginx/certs/tls.crt
               subPath: tls.crt
               name: crt
 
