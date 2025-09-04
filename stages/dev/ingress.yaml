@@ -34,25 +34,25 @@ spec:
     - host: konfi-dev.denic0la.ch
       http:
         paths:
-          - path: "/native"
-            pathType: ImplementationSpecific
+          - path: "/"
+            pathType: Prefix
             backend:
               service:
                 name: konfi-nginx
                 port:
                   number: 443
-          - path: "/sockJs"
-            pathType: Prefix
-            backend:
-              service:
-                name: konfi-back
-                port:
-                  number: 80
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: konfi-ui
-                port:
-                  number: 80
+#          - path: "/sockJs"
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: konfi-back
+#                port:
+#                  number: 80
+#          - path: "/"
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: konfi-ui
+#                port:
+#                  number: 80
 
