@@ -6,6 +6,18 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     service.kubernetes.io/service-name: "konfi-nginx"
     service.kubernetes.io/service-proxy-name: "nginx-reverse-proxy"
+    nginx.ingress.kubernetes.io/service-upstream: konfi-nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "240"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "240"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "240"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/proxy-max-temp-file-size: "1024m"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "16k"
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+    nginx.ingress.kubernetes.io/proxy-body-size: 32m
     kubernetes.io/wss: "4433"
 spec:
   selector:
