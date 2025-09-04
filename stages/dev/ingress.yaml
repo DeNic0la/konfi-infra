@@ -23,9 +23,9 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: konfi-back
+                name: konfi-nginx
                 port:
-                  number: 8000
+                  number: 443
           - path: "/sockJs"
             pathType: Prefix
             backend:
