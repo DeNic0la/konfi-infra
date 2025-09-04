@@ -10,10 +10,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - stage.host
+        - konfi-dev.denic0la.ch
       secretName: dev-letsencrypt-nginx
   rules:
-    - host: stage.host
+    - host: konfi-dev.denic0la.ch
       http:
         paths:
           - path: "/native"
