@@ -4,7 +4,7 @@ metadata:
   name: konfi
 spec:
   selector:
-    app: konfi
+    app: konfi-ui
   ports:
     - protocol: TCP
       port: 80
