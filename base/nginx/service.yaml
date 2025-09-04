@@ -4,6 +4,8 @@ metadata:
   name: konfi-nginx
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    service.kubernetes.io/service-name: "konfi-nginx"
+    service.kubernetes.io/service-proxy-name: "nginx-reverse-proxy"
     kubernetes.io/wss: "4433"
 spec:
   selector:
