@@ -15,6 +15,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
     nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/secure-backends: "false"
 
 
 spec:
@@ -28,7 +29,7 @@ spec:
       http:
         paths:
           - path: "/native"
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: konfi-back
