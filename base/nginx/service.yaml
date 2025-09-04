@@ -4,6 +4,7 @@ metadata:
   name: konfi-nginx
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    kubernetes.io/wss:
 spec:
   selector:
     app: nginx
@@ -12,5 +13,10 @@ spec:
       port: 443
       targetPort: 4433
       name: tcp-443
+      appProtocol: kubernetes.io/wss
+    - protocol: TCP
+      port: 8000
+      targetPort: 4433
+      name: tcp-8000
 
 

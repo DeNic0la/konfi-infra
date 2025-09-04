@@ -2,9 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: konfi
+  labels:
+    service.kubernetes.io/service-name: "konfi-backend"
+    service.kubernetes.io/service-proxy-name: "konfi-back"
 spec:
   selector:
     app: konfi
+  internalTrafficPolicy: Cluster
   ports:
     - protocol: TCP
       port: 80
