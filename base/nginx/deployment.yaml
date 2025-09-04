@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+      volumes:
+        - name: conf
+          configMap:
+            name: nginx-conf
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+        - name: tls
+          secret:
+            secretName: dev-letsencrypt-nginx
+            items:
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
+      containers:
+        - name: nginx
+          image: nginxinc/nginx-unprivileged:alpine3.22-perl
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /etc/nginx
+              name: conf
+              subPath: nginx.conf
+            - mountPath: /etc/nginx/certs
+              name: tls
+              subPath: tls.crt
+            - mountPath: /etc/nginx/certs
+              name: tls
+              subPath: tls.key
+          ports:
+            - containerPort: 443
+              protocol: TCP
+      restartPolicy: Always
