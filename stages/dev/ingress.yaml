@@ -30,10 +30,11 @@ spec:
       secretName: dev-letsencrypt-nginx
   rules:
     - host: konfi-dev.denic0la.ch
+      http_upgrade:
       http:
         paths:
           - path: "/native"
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: konfi-back
