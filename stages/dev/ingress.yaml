@@ -6,6 +6,8 @@ metadata:
   name: router
   annotations:
     cert-manager.io/issuer: dev-letsencrypt-nginx
+    cert-manager.io/certificate-name: dev-letsencrypt-nginx
+    cert-manager.io/common-name: konfi-dev.denic0la.ch
 spec:
   ingressClassName: nginx
   tls:
