@@ -11,13 +11,10 @@ metadata:
     nginx.ingress.kubernetes.io/service-upstream: konfi-nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-    nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
-    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "240"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "240"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "240"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/connection-proxy-header: "keep-alive"
     nginx.ingress.kubernetes.io/proxy-max-temp-file-size: "1024m"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "16k"
@@ -34,25 +31,25 @@ spec:
     - host: konfi-dev.denic0la.ch
       http:
         paths:
-          - path: "/"
+          - path: "/native"
             pathType: Prefix
             backend:
               service:
                 name: konfi-nginx
                 port:
                   number: 443
-#          - path: "/sockJs"
-#            pathType: Prefix
-#            backend:
-#              service:
-#                name: konfi-back
-#                port:
-#                  number: 80
-#          - path: "/"
-#            pathType: Prefix
-#            backend:
-#              service:
-#                name: konfi-ui
-#                port:
-#                  number: 80
+          - path: "/sockJs"
+            pathType: Prefix
+            backend:
+              service:
+                name: konfi-back
+                port:
+                  number: 80
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: konfi-ui
+                port:
+                  number: 80
 
