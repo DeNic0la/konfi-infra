@@ -7,7 +7,7 @@ images:
     newTag: 1.0.0
   - name: konfi-ui
     newName: registry.digitalocean.com/denic0la-ocean/konfi-ui
-    newTag: v1.0.4
+    newTag: v1.0.5
 
 namePrefix: dev-
 resources:
