@@ -12,6 +12,7 @@ images:
 namePrefix: dev-
 resources:
   - ../../base
+  - ingress.yaml
 patches:
   - patch: |-
       - op: replace
