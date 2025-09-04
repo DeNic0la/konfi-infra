@@ -22,14 +22,19 @@ spec:
             items:
               - key: nginx.conf
                 path: nginx.conf
-        - name: tls
+        - name: crt
           secret:
             secretName: dev-letsencrypt-nginx
             items:
               - key: tls.crt
                 path: tls.crt
+        - name: key
+          secret:
+            secretName: dev-letsencrypt-nginx
+            items:
               - key: tls.key
                 path: tls.key
+
       containers:
         - name: nginx
           image: nginxinc/nginx-unprivileged:alpine3.22-perl
@@ -39,7 +44,12 @@ spec:
               name: conf
               subPath: nginx.conf
             - mountPath: /etc/nginx/certs
-              name: tls
+              name: key
+              subPath: tls.key
+            - mountPath: /etc/nginx/certs
+              subPath: tls.crt
+              name: crt
+
           ports:
             - containerPort: 443
               protocol: TCP
