@@ -7,20 +7,10 @@ images:
     newTag: 1.0.0
   - name: konfi-ui
     newName: registry.digitalocean.com/denic0la-ocean/konfi-ui
-    newTag: v1.0.5
+    newTag: v1.0.6
 
 namePrefix: dev-
 resources:
   - ../../base
   - ingress.yaml
-patches:
-  - patch: |-
-      - op: replace
-        path: /spec/rules/0/host
-        value: konfi-dev.denic0la.ch
-      - op: replace
-        path: /spec/tls/0/hosts/0
-        value: konfi-dev.denic0la.ch
-    target:
-      kind: Ingress
-      name: router
+  - ui-configmap.yaml

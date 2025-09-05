@@ -4,5 +4,5 @@ resources:
   - issuer.cert-manager.yaml
   - back
   - ui
-  - nginx
+#  - nginx
 #  - database

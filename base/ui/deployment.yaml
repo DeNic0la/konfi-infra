@@ -20,6 +20,10 @@ spec:
               hostPort: 4000
               name: http
               protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: konfi-ui-config
+
           resources:
             requests:
               cpu: 100m

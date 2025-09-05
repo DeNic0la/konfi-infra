@@ -24,13 +24,13 @@ spec:
                 path: nginx.conf
         - name: crt
           secret:
-            secretName: dev-letsencrypt-nginx
+            secretName: denic0la.ch
             items:
               - key: tls.crt
                 path: tls.crt
         - name: key
           secret:
-            secretName: dev-letsencrypt-nginx
+            secretName: denic0la.ch
             items:
               - key: tls.key
                 path: tls.key
