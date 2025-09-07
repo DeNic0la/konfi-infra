@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: konfi-mysql
+spec:
+  selector:
+    app: konfi-mysql
+  ports:
+    - port: 3306

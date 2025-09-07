@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: konfi-ui-config
+data:
+  WS_HOST: table-konfi-dev.denic0la.ch
+  WS_PROTOCOL: wss

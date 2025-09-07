@@ -1,7 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: konfi-ui
+  name: konfi
+  labels:
+    service.kubernetes.io/service-proxy-name: "konfi-ui"
 spec:
   selector:
     app: konfi-ui

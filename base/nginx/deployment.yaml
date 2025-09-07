@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+      volumes:
+        - name: conf
+          configMap:
+            name: nginx-conf
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+        - name: crt
+          secret:
+            secretName: denic0la.ch
+            items:
+              - key: tls.crt
+                path: tls.crt
+        - name: key
+          secret:
+            secretName: denic0la.ch
+            items:
+              - key: tls.key
+                path: tls.key
+
+      containers:
+        - name: nginx
+          image: nginxinc/nginx-unprivileged:alpine3.22-perl
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf
+              name: conf
+              subPath: nginx.conf
+            - mountPath: /etc/nginx/certs/tls.key
+              name: key
+              subPath: tls.key
+            - mountPath: /etc/nginx/certs/tls.crt
+              subPath: tls.crt
+              name: crt
+
+          ports:
+            - containerPort: 4433
+              protocol: TCP
+              hostPort: 4433
+      restartPolicy: Always
