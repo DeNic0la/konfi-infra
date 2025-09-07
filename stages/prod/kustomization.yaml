@@ -13,14 +13,4 @@ namePrefix: prod-
 resources:
   - ../../base
   - ingress.yaml
-patches:
-  - patch: |-
-      - op: replace
-        path: /spec/rules/0/host
-        value: konfi.denic0la.ch
-      - op: replace
-        path: /spec/tls/0/hosts/0
-        value: konfi.denic0la.ch
-    target:
-      kind: Ingress
-      name: router
+  - ui-configmap.yaml

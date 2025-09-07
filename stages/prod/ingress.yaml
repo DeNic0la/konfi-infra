@@ -12,7 +12,7 @@ spec:
   tls:
     - hosts:
         - konfi.denic0la.ch
-      secretName: denic0la.ch
+      secretName: konfi-tls
   rules:
     - host: konfi.denic0la.ch
       http:
@@ -39,15 +39,17 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    cert-manager.io/cluster-issuer: letsencrypt-issuer
+    cert-manager.io/common-name: table-konfi.denic0la.ch
 #    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
         - table-konfi.denic0la.ch
-      secretName: denic0la.ch
+      secretName: table-konfi-tls
   rules:
-    - host: table-konfi-dev.denic0la.ch
+    - host: table-konfi.denic0la.ch
       http:
         paths:
           - path: /
