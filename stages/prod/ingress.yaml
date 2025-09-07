@@ -5,24 +5,18 @@ metadata:
     app: konfi
   name: router
   annotations:
-    cert-manager.io/issuer: prod-letsencrypt-nginx
+    cert-manager.io/cluster-issuer: letsencrypt-issuer
+    cert-manager.io/common-name: konfi.denic0la.ch
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - stage.host
-      secretName: letsencrypt-nginx-private-key
+        - konfi.denic0la.ch
+      secretName: denic0la.ch
   rules:
-    - host: stage.host
+    - host: konfi.denic0la.ch
       http:
         paths:
-          - path: "/native"
-            pathType: Prefix
-            backend:
-              service:
-                name: konfi-back
-                port:
-                  number: 80
           - path: "/sockJs"
             pathType: Prefix
             backend:
@@ -37,4 +31,29 @@ spec:
                 name: konfi-ui
                 port:
                   number: 80
-
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: websocket-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+#    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - table-konfi.denic0la.ch
+      secretName: denic0la.ch
+  rules:
+    - host: table-konfi-dev.denic0la.ch
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: konfi-back
+                port:
+                  number: 80

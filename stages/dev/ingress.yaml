@@ -5,15 +5,13 @@ metadata:
     app: konfi
   name: router
   annotations:
-    cert-manager.io/issuer: dev-letsencrypt-nginx
-    cert-manager.io/certificate-name: dev-letsencrypt-nginx
-    cert-manager.io/common-name: konfi-dev.denic0la.ch
+    cert-manager.io/certificate-name: dev-denic0la-wildcard
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
         - konfi-dev.denic0la.ch
-      secretName: dev-letsencrypt-nginx
+      secretName: denic0la-wildcard
   rules:
     - host: konfi-dev.denic0la.ch
       http:
@@ -40,13 +38,14 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    cert-manager.io/certificate-name: dev-denic0la-wildcard
 #    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
         - table-konfi-dev.denic0la.ch
-      secretName: denic0la.ch
+      secretName: denic0la-wildcard
   rules:
     - host: table-konfi-dev.denic0la.ch
       http:
