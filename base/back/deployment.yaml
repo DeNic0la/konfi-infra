@@ -31,6 +31,10 @@ spec:
                 secretKeyRef:
                   name: database-config
                   key: password
+            - name: DATABASE_PLATFORM
+              value: "org.hibernate.dialect.MySQLDialect"
+            - name: DATABASE_DRIVER_CLASSNAME
+              value: "com.mysql.jdbc.Driver"
           ports:
             - containerPort: 8080
               hostPort: 8080
