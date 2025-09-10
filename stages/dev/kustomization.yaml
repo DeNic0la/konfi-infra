@@ -4,7 +4,7 @@ namespace: konfi-dev
 images:
   - name: konfi-back
     newName: registry.digitalocean.com/denic0la-ocean/konfi-back
-    newTag: 1.0.1
+    newTag: 1.0.0
   - name: konfi-ui
     newName: registry.digitalocean.com/denic0la-ocean/konfi-ui
     newTag: v1.1.0
