@@ -9,10 +9,7 @@ images:
     newName: registry.digitalocean.com/denic0la-ocean/konfi-ui
     newTag: v1.1.0
 
-namePrefix: prod-
 resources:
   - ../../base
   - ingress.yaml
   - ui-configmap.yaml
-configurations:
-  - prefix-fix.yaml

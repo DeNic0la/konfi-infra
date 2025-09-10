@@ -10,11 +10,8 @@ images:
     newTag: v1.1.0
 
 
-namePrefix: dev-
 resources:
   - sealedsecret_database-config.yaml
   - ../../base
   - ingress.yaml
   - ui-configmap.yaml
-configurations:
-  - prefix-fix.yaml
