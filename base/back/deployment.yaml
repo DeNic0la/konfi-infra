@@ -42,13 +42,6 @@ spec:
             - containerPort: 8080
               hostPort: 8000
               name: ws
-          readinessProbe:
-            httpGet:
-              port: 8080
-              path: /actuator/health
-              scheme: HTTP
-            initialDelaySeconds: 60
-
           resources:
             requests:
               cpu: 100m
