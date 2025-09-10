@@ -14,3 +14,5 @@ resources:
   - ../../base
   - ingress.yaml
   - ui-configmap.yaml
+configurations:
+  - ../prefix-fix.yaml
