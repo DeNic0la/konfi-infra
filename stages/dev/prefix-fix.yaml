@@ -1,4 +1,9 @@
 namePrefix:
   - path: metadata/name
-    kind: SealedSecret
-    skip: true
+    kind: SealIngress
+  - path: metadata/name
+    kind: Service
+  - path: metadata/name
+    kind: Deployment
+  - path: spec/template/metadata/name
+    kind: Deployment
