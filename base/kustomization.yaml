@@ -4,4 +4,4 @@ resources:
   - back
   - ui
 #  - nginx
-#  - database
+  - database

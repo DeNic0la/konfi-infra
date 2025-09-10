@@ -11,6 +11,7 @@ images:
 
 namePrefix: dev-
 resources:
+  - sealedsecret_database-config.yaml
   - ../../base
   - ingress.yaml
   - ui-configmap.yaml
