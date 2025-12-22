@@ -1,5 +1,7 @@
 # konfi-infra
-<img src="https://argocd.denic0la.ch/api/badge?name=konfi&revision=true&showAppName=true" alt="Argocd Badge"/>
+
+[![DEV Status](https://argocd.denic0la.ch/api/badge?name=konfi-dev&revision=true&showAppName=true)](https://argocd.denic0la.ch/applications/konfi-dev)
+[![App Status](https://argocd.denic0la.ch/api/badge?name=konfi&revision=true&showAppName=true)](https://argocd.denic0la.ch/applications/konfi)
 
 The Infrastructure as Code (IaC) repository for the Konfi project.
 Uses [Kustomize](https://kustomize.io/) to manage Kubernetes manifests.
