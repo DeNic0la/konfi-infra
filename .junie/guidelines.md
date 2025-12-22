@@ -20,5 +20,6 @@ The project follows a "base and overlay" pattern. The `base/kustomization.yaml` 
 ### Development Guidelines
 - Always use Kustomize patches for environment-specific changes.
 - For global patches (applying to all resources of a kind), prefer JSON patches (`- op: add, path: ...`) over Strategic Merge Patches to avoid name mismatch issues.
+- The `dev` environment is automatically scaled down to not waste compute via GitHub Actions `.github/workflows/weekly-scale-down.yml``). These workflows toggle the `patch-stop-all.yaml` patch in `stages/dev/kustomization.yaml`.
 - Ensure that any new components are added to the `base/` directory and referenced in the relevant `kustomization.yaml` files.
 - Secrets are managed via `SealedSecrets` in some environments (e.g., `stages/dev/sealedsecret_database-config.yaml`).
