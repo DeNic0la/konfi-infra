@@ -16,7 +16,7 @@ resources:
   - ingress.yaml
   - ui-configmap.yaml
 
-#patches:
-#  - path: patch-stop-all.yaml
-#    target:
-#      kind: Deployment
+patches:
+  - path: patch-stop-all.yaml
+    target:
+      kind: Deployment
