@@ -15,7 +15,7 @@ spec:
       containers:
         - name: konfi-back
           image: konfi-back:latest
-          env:
+#          env:
 #            - name: DATABASE_URL
 #              valueFrom:
 #                secretKeyRef:
