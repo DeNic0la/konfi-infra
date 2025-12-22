@@ -17,11 +17,26 @@ spec:
         - image: mysql:9
           name: konfi-mysql
           env:
-            # Use secret in real usage
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-root-password
-                  key: password
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: database-config
+                key: password
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: database-config
+                key: name
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: database-config
+                key: user
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: database-config
+                key: password
           ports:
             - containerPort: 3306
               name: mysql

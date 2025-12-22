@@ -15,6 +15,26 @@ spec:
       containers:
         - name: konfi-back
           image: konfi-back:latest
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: database-config
+                  key: url
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: database-config
+                  key: user
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-config
+                  key: password
+            - name: DATABASE_PLATFORM
+              value: "org.hibernate.dialect.MySQLDialect"
+            - name: DATABASE_DRIVER_CLASSNAME
+              value: "com.mysql.jdbc.Driver"
           ports:
             - containerPort: 8080
               hostPort: 8080
@@ -22,6 +42,22 @@ spec:
             - containerPort: 8080
               hostPort: 8000
               name: ws
+          readinessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 5
+            httpGet:
+              port: 8080
+              scheme: HTTP
+              path: /actuator/health/readiness
+          livenessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 5
+            httpGet:
+              port: 8080
+              scheme: HTTP
+              path: /actuator/health/liveness
           resources:
             requests:
               cpu: 100m
